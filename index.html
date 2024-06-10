@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/95555c5730.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Slider</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(45deg, #ff6347, #ff8c00);
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .main {
+        width: 90%;
+        max-width: 800px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        overflow: hidden;
+      }
+      .slider-parent {
+        width: 100%;
+        height: 300px;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+      }
+      .slider {
+        display: flex;
+        width: 400%;
+        height: 100%;
+        transition: all 0.5s ease-in-out;
+      }
+      .slides {
+        width: 25%;
+        height: 100%;
+      }
+      .img1 {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .left-btn,
+      .right-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: 2px solid #fff;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .left-btn:hover,
+      .right-btn:hover {
+        background-color: #fff;
+      }
+      .left-btn {
+        left: 10px;
+      }
+      .right-btn {
+        right: 10px;
+      }
+      .circle-box {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .circle-box input[type="radio"] {
+        display: none;
+      }
+      .circle-box input[type="radio"] + label {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: #ddd;
+        margin: 0 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .circle-box input[type="radio"]:checked + label {
+        background-color: #ff6347;
+      }
+      .img-box {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-around;
+      }
+      .img2 {
+        width: 20%;
+        height: auto;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.3s, transform 0.3s;
+      }
+      .img2:hover,
+      .img2.imgex {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="slider-parent">
+        <button class="left-btn">
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
+        <button class="right-btn">
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+        <div class="slider">
+          <div class="slides">
+            <img class="img1" src="./img/eagle.avif" alt="Eagle" />
+          </div>
+          <div class="slides">
+            <img class="img1" src="./img/castle.jpg" alt="Castle" />
+          </div>
+          <div class="slides">
+            <img class="img1" src="./img/flower.jpg" alt="Flower" />
+          </div>
+          <div class="slides">
+            <img class="img1" src="./img/sky.jpg" alt="Sky" />
+          </div>
+        </div>
+      </div>
+      <div class="circle-box">
+        <input type="radio" class="radio1" name="a" id="radio1" checked />
+        <label for="radio1"></label>
+        <input type="radio" class="radio1" name="a" id="radio2" />
+        <label for="radio2"></label>
+        <input type="radio" class="radio1" name="a" id="radio3" />
+        <label for="radio3"></label>
+        <input type="radio" class="radio1" name="a" id="radio4" />
+        <label for="radio4"></label>
+      </div>
+
+      <div class="img-box">
+        <img src="./img/eagle.avif" alt="Eagle" class="img2" />
+        <img src="./img/castle.jpg" alt="Castle" class="img2" />
+        <img src="./img/flower.jpg" alt="Flower" class="img2" />
+        <img src="./img/sky.jpg" alt="Sky" class="img2" />
+      </div>
+    </div>
+
+    <script>
+      const sliderParent = document.querySelector(".slider");
+      const rightBtn = document.querySelector(".right-btn");
+      const leftBtn = document.querySelector(".left-btn");
+      const slides = document.querySelectorAll(".slides");
+      const radioBtns = document.querySelectorAll(".radio1");
+      const imgs = document.querySelectorAll(".img2");
+      let customIndex = 0;
+
+      radioBtns.forEach((radio, index) => {
+        radio.addEventListener("click", function () {
+          customIndex = index;
+          sliderParent.style.marginLeft = `-${customIndex * 100}%`;
+          updateActiveImage();
+        });
+      });
+
+      imgs.forEach((img, index) => {
+        img.addEventListener("click", function () {
+          customIndex = index;
+          sliderParent.style.marginLeft = `-${customIndex * 100}%`;
+          radioBtns[customIndex].checked = true;
+          updateActiveImage();
+        });
+      });
+
+      leftBtn.addEventListener("click", function () {
+        customIndex = (customIndex - 1 + slides.length) % slides.length;
+        sliderParent.style.marginLeft = `-${customIndex * 100}%`;
+        radioBtns[customIndex].checked = true;
+        updateActiveImage();
+      });
+
+      rightBtn.addEventListener("click", function () {
+        customIndex = (customIndex + 1) % slides.length;
+        sliderParent.style.marginLeft = `-${customIndex * 100}%`;
+        radioBtns[customIndex].checked = true;
+        updateActiveImage();
+      });
+
+      function updateActiveImage() {
+        imgs.forEach((img, index) => {
+          img.classList.toggle("imgex", index === customIndex);
+        });
+      }
+    </script>
+  </body>
+</html>
